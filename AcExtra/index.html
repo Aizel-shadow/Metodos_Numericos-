@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Portafolio Personal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --text-primary: #2c3e50;
+            --text-secondary: #6c757d;
+            --accent: #3498db;
+            --accent-hover: #2980b9;
+            --border: #dee2e6;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --text-primary: #e4e4e4;
+            --text-secondary: #a0a0a0;
+            --accent: #3498db;
+            --accent-hover: #5dade2;
+            --border: #404040;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: var(--bg-secondary);
+            border-bottom: 2px solid var(--border);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: background-color 0.3s;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: 2px solid var(--border);
+            color: var(--text-primary);
+            cursor: pointer;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            margin: 60px 0;
+            flex-wrap: wrap;
+        }
+
+        .profile-image-container {
+            position: relative;
+        }
+
+        .profile-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--accent);
+            box-shadow: 0 4px 15px var(--shadow);
+        }
+
+        .upload-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+            cursor: pointer;
+        }
+
+        .profile-image-container:hover .upload-overlay {
+            opacity: 1;
+        }
+
+        .profile-info h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .profile-info p {
+            font-size: 1.2em;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--accent);
+            color: white;
+            border-radius: 50%;
+            text-decoration: none;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        .social-links a:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-3px);
+        }
+
+        section {
+            margin: 60px 0;
+        }
+
+        h2 {
+            font-size: 2em;
+            margin-bottom: 30px;
+            color: var(--text-primary);
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 10px;
+        }
+
+        .card {
+            background-color: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 20px var(--shadow);
+        }
+
+        .card h3 {
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .skill-item {
+            background-color: var(--bg-secondary);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid var(--border);
+            transition: border-color 0.3s, transform 0.3s;
+        }
+
+        .skill-item:hover {
+            border-color: var(--accent);
+            transform: scale(1.05);
+        }
+
+        .skill-item i {
+            font-size: 2.5em;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .interests-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .interest-tag {
+            background-color: var(--accent);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .file-upload-area {
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 20px 0;
+        }
+
+        .file-upload-area:hover {
+            border-color: var(--accent);
+            background-color: var(--bg-secondary);
+        }
+
+        .file-upload-area i {
+            font-size: 3em;
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .uploaded-files {
+            margin-top: 20px;
+        }
+
+        .file-item {
+            background-color: var(--bg-secondary);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .delete-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .delete-btn:hover {
+            background-color: #c0392b;
+        }
+
+        footer {
+            background-color: var(--bg-secondary);
+            text-align: center;
+            padding: 30px;
+            margin-top: 60px;
+            border-top: 2px solid var(--border);
+        }
+
+        @media (max-width: 768px) {
+            .profile-section {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-info h1 {
+                font-size: 2em;
+            }
+
+            .nav-links {
+                gap: 15px;
+                margin-top: 10px;
+            }
+
+            .skills-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+
+            h2 {
+                font-size: 1.5em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+
+            .profile-image {
+                width: 150px;
+                height: 150px;
+            }
+
+            .social-links {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#proyectos">Proyectos</a></li>
+                <li><a href="#habilidades">Habilidades</a></li>
+                <li><a href="#intereses">Intereses</a></li>
+                <li><a href="#archivos">Archivos</a></li>
+            </ul>
+            <button class="theme-toggle" onclick="toggleTheme()">
+                <i class="fas fa-moon"></i>
+            </button>
+        </nav>
+    </header>
+
+    <div class="container">
+        <section id="inicio" class="profile-section">
+            <div class="profile-image-container">
+                <img src="https://via.placeholder.com/200" alt="Foto de perfil" class="profile-image" id="profileImg">
+                <div class="upload-overlay" onclick="document.getElementById('profileUpload').click()">
+                    <i class="fas fa-camera" style="color: white; font-size: 2em;"></i>
+                </div>
+                <input type="file" id="profileUpload" accept="image/*" onchange="loadProfileImage(event)">
+            </div>
+            
+            <div class="profile-info">
+                <h1>Tu Nombre</h1>
+                <p>Estudiante de [Tu Carrera] | Desarrollador | Entusiasta de la Tecnología</p>
+                <div class="social-links">
+                    <a href="https://github.com/tuusuario" target="_blank" title="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://linkedin.com/in/tuusuario" target="_blank" title="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="mailto:tu@email.com" title="Email">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                    <a href="https://twitter.com/tuusuario" target="_blank" title="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="proyectos">
+            <h2><i class="fas fa-code"></i> Proyectos</h2>
+            <div class="card">
+                <h3>Proyecto 1: Sistema de Gestión</h3>
+                <p>Aplicación web desarrollada con React y Node.js para gestionar tareas y proyectos de manera eficiente.</p>
+                <p><strong>Tecnologías:</strong> React, Node.js, MongoDB, Express</p>
+                <a href="#" style="color: var(--accent);">Ver proyecto →</a>
+            </div>
+            <div class="card">
+                <h3>Proyecto 2: App Móvil de Clima</h3>
+                <p>Aplicación móvil que proporciona pronósticos del tiempo en tiempo real utilizando APIs externas.</p>
+                <p><strong>Tecnologías:</strong> React Native, API REST, Redux</p>
+                <a href="#" style="color: var(--accent);">Ver proyecto →</a>
+            </div>
+            <div class="card">
+                <h3>Proyecto 3: Análisis de Datos</h3>
+                <p>Proyecto de ciencia de datos para análisis y visualización de grandes conjuntos de datos.</p>
+                <p><strong>Tecnologías:</strong> Python, Pandas, Matplotlib, Jupyter</p>
+                <a href="#" style="color: var(--accent);">Ver proyecto →</a>
+            </div>
+        </section>
+
+        <section id="habilidades">
+            <h2><i class="fas fa-tools"></i> Habilidades</h2>
+            <div class="skills-grid">
+                <div class="skill-item">
+                    <i class="fab fa-js"></i>
+                    <h4>JavaScript</h4>
+                </div>
+                <div class="skill-item">
+                    <i class="fab fa-python"></i>
+                    <h4>Python</h4>
+                </div>
+                <div class="skill-item">
+                    <i class="fab fa-react"></i>
+                    <h4>React</h4>
+                </div>
+                <div class="skill-item">
+                    <i class="fab fa-node"></i>
+                    <h4>Node.js</h4>
+                </div>
+                <div class="skill-item">
+                    <i class="fas fa-database"></i>
+                    <h4>SQL</h4>
+                </div>
+                <div class="skill-item">
+                    <i class="fab fa-git-alt"></i>
+                    <h4>Git</h4>
+                </div>
+                <div class="skill-item">
+                    <i class="fab fa-html5"></i>
+                    <h4>HTML/CSS</h4>
+                </div>
+                <div class="skill-item">
+                    <i class="fas fa-brain"></i>
+                    <h4>Machine Learning</h4>
+                </div>
+            </div>
+        </section>
+
+        <section id="intereses">
+            <h2><i class="fas fa-heart"></i> Intereses</h2>
+            <div class="interests-list">
+                <span class="interest-tag">Inteligencia Artificial</span>
+                <span class="interest-tag">Desarrollo Web</span>
+                <span class="interest-tag">Ciencia de Datos</span>
+                <span class="interest-tag">Robótica</span>
+                <span class="interest-tag">Ciberseguridad</span>
+                <span class="interest-tag">Open Source</span>
+                <span class="interest-tag">IoT</span>
+                <span class="interest-tag">Cloud Computing</span>
+            </div>
+        </section>
+
+        <section id="archivos">
+            <h2><i class="fas fa-folder"></i> Archivos y Documentos</h2>
+            <div class="file-upload-area" onclick="document.getElementById('fileUpload').click()">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>Subir Archivos</h3>
+                <p>Haz clic aquí o arrastra archivos para subir</p>
+                <input type="file" id="fileUpload" multiple onchange="handleFileUpload(event)">
+            </div>
+            <div class="uploaded-files" id="uploadedFiles">
+                <!-- Los archivos subidos aparecerán aquí -->
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Tu Nombre. Todos los derechos reservados.</p>
+        <p>Hecho con <i class="fas fa-heart" style="color: #e74c3c;"></i> y <i class="fas fa-coffee"></i></p>
+    </footer>
+
+    <script>
+        // Toggle Theme
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            
+            const icon = document.querySelector('.theme-toggle i');
+            icon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            
+            // Guardar preferencia en memoria
+            themePreference = newTheme;
+        }
+
+        // Cargar imagen de perfil
+        function loadProfileImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('profileImg').src = e.target.result;
+                    profileImageData = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Sistema de archivos en memoria
+        let uploadedFilesData = [];
+        let profileImageData = null;
+        let themePreference = 'light';
+
+        function handleFileUpload(event) {
+            const files = event.target.files;
+            const container = document.getElementById('uploadedFiles');
+            
+            for (let file of files) {
+                const fileData = {
+                    id: Date.now() + Math.random(),
+                    name: file.name,
+                    size: (file.size / 1024).toFixed(2) + ' KB',
+                    type: file.type,
+                    date: new Date().toLocaleDateString()
+                };
+                
+                uploadedFilesData.push(fileData);
+                
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.innerHTML = `
+                    <div>
+                        <i class="fas fa-file"></i>
+                        <strong>${fileData.name}</strong> - ${fileData.size} - ${fileData.date}
+                    </div>
+                    <button class="delete-btn" onclick="deleteFile(${fileData.id})">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                `;
+                
+                container.appendChild(fileItem);
+            }
+            
+            event.target.value = '';
+        }
+
+        function deleteFile(fileId) {
+            uploadedFilesData = uploadedFilesData.filter(f => f.id !== fileId);
+            renderFiles();
+        }
+
+        function renderFiles() {
+            const container = document.getElementById('uploadedFiles');
+            container.innerHTML = '';
+            
+            uploadedFilesData.forEach(fileData => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.innerHTML = `
+                    <div>
+                        <i class="fas fa-file"></i>
+                        <strong>${fileData.name}</strong> - ${fileData.size} - ${fileData.date}
+                    </div>
+                    <button class="delete-btn" onclick="deleteFile(${fileData.id})">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                `;
+                container.appendChild(fileItem);
+            });
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
